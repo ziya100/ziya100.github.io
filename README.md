@@ -1,16 +1,53 @@
-# React + Vite
+# Ziya Abdullayev — Cyber Security Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A professional cybersecurity portfolio website focused on web application security, API security, bug bounty research, responsible disclosure, and practical penetration testing.
 
-Currently, two official plugins are available:
+## Live Website
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+https://ziya100.github.io
 
-## React Compiler
+## Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This website is my public cybersecurity portfolio. It is designed to present my security research profile, achievements, public-safe responsible disclosure experience, technical posts, learning notes, tools, and contact information.
 
-## Expanding the ESLint configuration
+The website follows a responsible disclosure approach. It does not publish sensitive technical details, private endpoints, customer data, proof-of-concept videos, access tokens, cookies, secrets, or unresolved vulnerability information.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Focus Areas
+
+- Web Application Security
+- API Security
+- Bug Bounty
+- Responsible Disclosure
+- Penetration Testing
+- Authentication and Access Control Testing
+- Vulnerability Reporting
+- Security Research Notes
+
+## Main Sections
+
+- Home
+- About
+- Achievements
+- Security Posts
+- Custom Pages
+- Responsible Disclosure Portfolio
+- Tools
+- Learning Notes
+- Contact
+
+## Architecture
+
+The project uses a split architecture:
+
+```text
+Frontend:
+GitHub Pages
+
+Backend API:
+Vercel Functions
+
+Database and Authentication:
+Supabase
+
+Sensitive configuration:
+Stored outside the public repository
