@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Shield,
   Terminal,
@@ -672,19 +672,23 @@ export default function CyberSecurityPortfolio() {
     return () => window.removeEventListener("hashchange", syncRoute);
   }, []);
 
-  async function loadContent() {
-    try {
-      const [contentData, data] = await Promise.all([apiFetch("/api/site-content"), apiFetch("/api/content")]);
-      setContent(normalizeContent(contentData.content));
-      setDynamicContent({ posts: data.posts || [], pages: data.pages || [] });
-      setLoadError("");
-    } catch (err) {
-      setLoadError(err.message);
-    }
-  }
-
   useEffect(() => {
-    loadContent();
+    let active = true;
+
+    Promise.all([apiFetch("/api/site-content"), apiFetch("/api/content")])
+      .then(([contentData, data]) => {
+        if (!active) return;
+        setContent(normalizeContent(contentData.content));
+        setDynamicContent({ posts: data.posts || [], pages: data.pages || [] });
+        setLoadError("");
+      })
+      .catch((err) => {
+        if (active) setLoadError(err.message);
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const customSlug = route.startsWith("#/p/") ? decodeURIComponent(route.replace("#/p/", "")) : null;
@@ -719,4 +723,3 @@ export default function CyberSecurityPortfolio() {
     </div>
   );
 }
-
