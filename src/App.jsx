@@ -1,21 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Shield,
-  Terminal,
-  Bug,
-  Lock,
-  Globe,
-  Mail,
-  ExternalLink,
-  Search,
-  Menu,
-  FileText,
-  AlertTriangle,
-  Calendar,
-  X,
-  ChevronRight,
-  Target,
-  Eye,
+  Shield, Terminal, Bug, Lock, Globe, Mail, ExternalLink,
+  Search, Menu, FileText, AlertTriangle, Calendar, X,
+  ChevronRight, Target, Eye,
 } from "lucide-react";
 
 const API_BASE_URL = "https://ziya-portfolio-api.vercel.app";
@@ -27,8 +14,7 @@ const FALLBACK = {
     name: "Ziya Abdullayev",
     title: "Cyber Security Researcher",
     headline: "Web Application Security, Bug Bounty & Responsible Disclosure",
-    summary:
-      "Identifying and responsibly disclosing security vulnerabilities across web applications and APIs. Specializing in access control, authentication flaws, API logic weaknesses and penetration testing with clear, actionable reporting.",
+    summary: "Identifying and responsibly disclosing security vulnerabilities across web applications and APIs. Specializing in access control, authentication flaws, API logic weaknesses and penetration testing with clear, actionable reporting.",
     email: "ziya.abdullayev.40@gmail.com",
     linkedin: "https://www.linkedin.com/in/ziya-abdullayev-cyber/",
     github: "https://github.com/ziya100",
@@ -90,6 +76,65 @@ async function api(path) {
   return r.json();
 }
 
+/* ═══════════ MATRIX RAIN ═══════════ */
+function MatrixRain() {
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let w, h, cols, drops;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`アイウエオカキクケコサシスセソタチツテトナニヌネノ";
+    const fontSize = 14;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      cols = Math.floor(w / fontSize);
+      drops = Array(cols).fill(1);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    function draw() {
+      ctx.fillStyle = "rgba(10, 10, 15, 0.05)";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#00f0ff";
+      ctx.font = `${fontSize}px monospace`;
+      for (let i = 0; i < cols; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > h && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    const interval = setInterval(draw, 50);
+    return () => { clearInterval(interval); window.removeEventListener("resize", resize); };
+  }, []);
+  return <canvas ref={canvasRef} id="matrix-canvas" />;
+}
+
+/* ═══════════ HEX PARTICLES ═══════════ */
+function HexParticles() {
+  const particles = useMemo(() =>
+    Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 8}s`,
+      duration: `${6 + Math.random() * 6}s`,
+      size: `${4 + Math.random() * 4}px`,
+    })), []);
+  return (
+    <div className="fixed inset-0 z-[1] pointer-events-none">
+      {particles.map(p => (
+        <div key={p.id} className="hex-particle" style={{
+          left: p.left, animationDelay: p.delay, animationDuration: p.duration, width: p.size, height: p.size,
+        }} />
+      ))}
+    </div>
+  );
+}
+
 /* ═══════════ REVEAL ═══════════ */
 function useRv() {
   const ref = useRef(null);
@@ -121,15 +166,15 @@ function Nav({ active }) {
   }, []);
 
   return (
-    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-[#030712]/80 backdrop-blur-xl border-b border-white/[0.03]" : "bg-transparent")}>
+    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/[0.04]" : "bg-transparent")}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 lg:px-8">
-        <a href="#home" className="flex items-center gap-2.5 group">
-          <div className="h-9 w-9 grid place-items-center rounded-lg border border-white/[0.06] bg-[#080e1c] group-hover:border-[var(--color-neon)]/20 transition-colors">
-            <Shield className="h-4 w-4 text-[var(--color-neon)]" />
+        <a href="#home" className="flex items-center gap-3 group">
+          <div className="h-10 w-10 grid place-items-center rounded-lg border border-[var(--color-cyber)]/20 bg-[var(--color-bg-card)] group-hover:border-[var(--color-cyber)]/40 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.15)] transition-all">
+            <Shield className="h-5 w-5 text-[var(--color-cyber)]" />
           </div>
           <div>
-            <div className="text-sm font-bold tracking-[0.2em] text-white uppercase">ZiyaSec<span className="text-[var(--color-neon)]">.</span></div>
-            <div className="text-[9px] font-semibold tracking-[0.12em] uppercase text-[var(--color-txt-dim)]">Security Research</div>
+            <div className="text-sm font-bold tracking-[0.25em] text-white uppercase">ZiyaSec<span className="text-[var(--color-cyber)]">.</span></div>
+            <div className="text-[9px] font-semibold tracking-[0.15em] uppercase text-[#64748b]">Security Research</div>
           </div>
         </a>
 
@@ -137,22 +182,22 @@ function Nav({ active }) {
           {NAV.map(n => <a key={n.id} href={`#${n.id}`} className={cn("nav-link", active === n.id && "active")}>{n.label}</a>)}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-1.5 rounded border border-white/[0.04] bg-white/[0.015] px-2 py-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-mint)]" />
-          <span className="text-[9px] font-bold tracking-wider uppercase text-[var(--color-txt-dim)]">Available</span>
+        <div className="hidden lg:flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-1.5">
+          <span className="w-2 h-2 rounded-full bg-[var(--color-neon)] shadow-[0_0_8px_var(--color-neon)]" />
+          <span className="text-[9px] font-bold tracking-wider uppercase text-[#64748b]">Available</span>
         </div>
 
-        <button className="lg:hidden grid h-9 w-9 place-items-center rounded-lg border border-white/[0.06] text-white hover:border-white/10 transition-colors" onClick={() => setOpen(v => !v)} aria-label="Menu">
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        <button className="lg:hidden grid h-10 w-10 place-items-center rounded-lg border border-white/[0.06] text-white hover:border-[var(--color-cyber)]/20 transition-colors" onClick={() => setOpen(v => !v)} aria-label="Menu">
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {open && (
-        <div className="lg:hidden border-t border-white/[0.03] bg-[#030712]/95 backdrop-blur-xl px-5 py-4">
+        <div className="lg:hidden border-t border-white/[0.04] bg-[#0a0a0f]/95 backdrop-blur-xl px-5 py-4">
           <div className="grid gap-1">
             {NAV.map(n => {
               const Ic = n.icon;
-              return <a key={n.id} href={`#${n.id}`} onClick={() => setOpen(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-[var(--color-txt-dim)] hover:text-white hover:bg-white/[0.03] transition-colors"><Ic className="h-4 w-4 text-white/20" />{n.label}</a>;
+              return <a key={n.id} href={`#${n.id}`} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#64748b] hover:text-white hover:bg-white/[0.03] transition-colors"><Ic className="h-4 w-4 text-white/20" />{n.label}</a>;
             })}
           </div>
         </div>
@@ -169,82 +214,83 @@ function Hero({ c }) {
 
   useEffect(() => {
     let i = 0;
-    const tm = setInterval(() => { if (i <= full.length) { setT(full.slice(0, i)); i++; } else clearInterval(tm); }, 80);
+    const tm = setInterval(() => { if (i <= full.length) { setT(full.slice(0, i)); i++; } else clearInterval(tm); }, 100);
     return () => clearInterval(tm);
   }, []);
 
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 pb-16">
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
         <div>
           <Rv>
             <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {p.firstName} <span className="text-[var(--color-neon)]">{p.lastName}</span>
-              <span className="block mt-2 text-base font-medium text-[var(--color-txt-dim)] sm:text-lg">{p.title}</span>
+              <span className="glitch" data-text={p.firstName}>{p.firstName}</span>{" "}
+              <span className="text-[var(--color-cyber)] glitch" data-text={p.lastName}>{p.lastName}</span>
+              <span className="block mt-3 text-base font-medium text-[#64748b] sm:text-lg">{p.title}</span>
             </h1>
           </Rv>
-          <Rv delay={0.08}>
-            <p className="mt-5 max-w-lg text-sm leading-relaxed text-[var(--color-txt-dim)] sm:text-base">{p.summary}</p>
+          <Rv delay={0.1}>
+            <p className="mt-6 max-w-lg text-sm leading-relaxed text-[#94a3b8] sm:text-base">{p.summary}</p>
           </Rv>
-          <Rv delay={0.16}>
-            <div className="mt-7 flex flex-wrap gap-2.5">
-              <a href="#posts" className="btn btn-fill"><Terminal className="h-3.5 w-3.5" />Posts</a>
-              <a href="#disclosure" className="btn btn-line"><Shield className="h-3.5 w-3.5" />Disclosure</a>
+          <Rv delay={0.2}>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#posts" className="btn btn-fill"><Terminal className="h-4 w-4" />Posts</a>
+              <a href="#disclosure" className="btn btn-line"><Shield className="h-4 w-4" />Disclosure</a>
             </div>
           </Rv>
-          <Rv delay={0.24}>
-            <div className="mt-10 grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+          <Rv delay={0.3}>
+            <div className="mt-12 grid grid-cols-2 gap-3 lg:grid-cols-4">
               {c.stats.map((s, i) => (
                 <div key={`${s.label}-${i}`} className="stat">
-                  <div className="text-lg font-bold text-white">{s.value}</div>
-                  <div className="mt-0.5 text-[10px] font-bold tracking-wider uppercase text-[var(--color-txt-dim)]">{s.label}</div>
-                  <div className="text-[11px] text-[var(--color-txt-dim)]/50">{s.note}</div>
+                  <div className="text-xl font-bold text-white">{s.value}</div>
+                  <div className="mt-1 text-[10px] font-bold tracking-wider uppercase text-[#64748b]">{s.label}</div>
+                  <div className="text-[11px] text-[#475569]">{s.note}</div>
                 </div>
               ))}
             </div>
           </Rv>
         </div>
 
-        <Rv delay={0.12}>
+        <Rv delay={0.15}>
           <div className="card p-0 overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.03]">
-              <span className="w-2 h-2 rounded-full bg-[#ff5f56]" />
-              <span className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
-              <span className="w-2 h-2 rounded-full bg-[#27c93f]" />
-              <span className="ml-1.5 text-[10px] font-medium text-[var(--color-txt-dim)]">ziya@research:~</span>
+            <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/[0.04]">
+              <span className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+              <span className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+              <span className="w-3 h-3 rounded-full bg-[#27c93f]" />
+              <span className="ml-2 text-[11px] font-medium text-[#64748b]">ziya@research:~</span>
             </div>
-            <div className="p-5 font-mono text-[13px] space-y-3.5">
+            <div className="p-6 font-mono text-[13px] space-y-4">
               <div>
-                <span className="text-[var(--color-neon)]">{t}</span>
+                <span className="text-[var(--color-cyber)]">{t}</span>
                 {t.length < full.length && <span className="cursor" />}
               </div>
               {t.length >= full.length && (
-                <div className="text-[var(--color-txt-dim)]">
+                <div className="text-[#94a3b8]">
                   <span className="text-white/20">└─$</span>{" "}
                   <span className="text-white">{p.name.toLowerCase().replace(" ", "_")} :: {p.title}</span>
                 </div>
               )}
-              <div className="pt-1.5">
-                <div className="text-[var(--color-neon)] text-[11px] mb-2.5">$ focus --list</div>
-                <div className="space-y-1">
+              <div className="pt-2">
+                <div className="text-[var(--color-cyber)] text-[11px] mb-3">$ focus --list</div>
+                <div className="space-y-1.5">
                   {["Web Application Security", "API Security", "Bug Bounty", "Responsible Disclosure", "Penetration Testing"].map(x => (
-                    <div key={x} className="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-[var(--color-txt)] text-xs hover:bg-white/[0.02] transition-colors">
-                      <ChevronRight className="h-3 w-3 text-[var(--color-neon)]/30" />
+                    <div key={x} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[#e2e8f0] text-xs hover:bg-white/[0.02] transition-colors">
+                      <ChevronRight className="h-3 w-3 text-[var(--color-cyber)]/40" />
                       <span className="font-mono">{x}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="pt-1.5">
-                <div className="text-[var(--color-neon)] text-[11px] mb-2.5">$ disclosure_policy</div>
-                <div className="rounded-md border border-white/[0.03] bg-white/[0.01] p-2.5 text-xs text-[var(--color-txt-dim)] flex items-start gap-2">
-                  <AlertTriangle className="h-3 w-3 shrink-0 mt-0.5 text-[var(--color-gold)]" />
+              <div className="pt-2">
+                <div className="text-[var(--color-cyber)] text-[11px] mb-3">$ disclosure_policy</div>
+                <div className="rounded-lg border border-white/[0.04] bg-white/[0.015] p-3 text-xs text-[#94a3b8] flex items-start gap-2.5">
+                  <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5 text-[#ffd600]" />
                   <span>No customer data, tokens, private endpoints or unresolved technical details are published.</span>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5 text-[var(--color-neon)] text-xs pt-0.5">
+              <div className="flex items-center gap-2 text-[var(--color-cyber)] text-xs pt-1">
                 <span>$</span>
-                <span className="w-1.5 h-3 bg-[var(--color-neon)] animate-pulse" />
+                <span className="w-2 h-4 bg-[var(--color-cyber)] animate-pulse shadow-[0_0_8px_var(--color-cyber)]" />
               </div>
             </div>
           </div>
@@ -269,14 +315,16 @@ function About() {
           <div className="section-tag">About</div>
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-4xl max-w-3xl">Security research with clean reporting and ethical boundaries.</h2>
         </Rv>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((c, i) => (
-            <Rv key={c.title} delay={i * 0.06}>
+            <Rv key={c.title} delay={i * 0.08}>
               <div className="card h-full">
-                <c.icon className="h-5 w-5 text-[var(--color-neon)]" />
-                <h3 className="mt-3 text-sm font-bold text-white">{c.title}</h3>
-                <p className="mt-1.5 text-xs leading-relaxed text-[var(--color-txt-dim)]">{c.desc}</p>
-                <div className="bar mt-3"><div className="bar-fill" style={{ width: `${75 + i * 8}%` }} /></div>
+                <div className="h-10 w-10 grid place-items-center rounded-lg border border-[var(--color-cyber)]/10 bg-[var(--color-cyber)]/5">
+                  <c.icon className="h-5 w-5 text-[var(--color-cyber)]" />
+                </div>
+                <h3 className="mt-4 text-sm font-bold text-white">{c.title}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-[#94a3b8]">{c.desc}</p>
+                <div className="bar mt-4"><div className="bar-fill" style={{ width: `${75 + i * 8}%` }} /></div>
               </div>
             </Rv>
           ))}
@@ -303,20 +351,20 @@ function Achievements({ c }) {
           <div className="section-tag">Achievements</div>
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-4xl max-w-3xl">Recognition, training and security milestones.</h2>
         </Rv>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {c.achievements.map((a, i) => (
-            <Rv key={`${a.title}-${i}`} delay={i * 0.05}>
+            <Rv key={`${a.title}-${i}`} delay={i * 0.06}>
               <div className="card h-full flex flex-col">
-                <div className="flex flex-wrap items-start justify-between gap-2">
+                <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="text-[10px] font-bold tracking-wider text-[var(--color-txt-dim)]">{a.year}</div>
-                    <h3 className="mt-1 text-sm font-bold text-white">{a.title}</h3>
+                    <div className="text-[10px] font-bold tracking-wider text-[#64748b]">{a.year}</div>
+                    <h3 className="mt-1.5 text-sm font-bold text-white">{a.title}</h3>
                   </div>
                   <span className={`badge badge-${tv(a.tag)}`}>{a.tag}</span>
                 </div>
-                <p className="mt-2 flex-1 text-xs leading-relaxed text-[var(--color-txt-dim)]">{a.description}</p>
+                <p className="mt-3 flex-1 text-xs leading-relaxed text-[#94a3b8]">{a.description}</p>
                 {a.link && (
-                  <a href={a.link} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-neon)] hover:text-white transition-colors">
+                  <a href={a.link} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-bold text-[var(--color-cyber)] hover:text-white transition-colors">
                     View reference <ExternalLink className="h-3 w-3" />
                   </a>
                 )}
@@ -349,9 +397,9 @@ function Posts({ posts }) {
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-4xl max-w-3xl">Security posts and learning notes.</h2>
         </Rv>
         <Rv delay={0.08}>
-          <div className="mt-6 mb-5 grid gap-2.5 sm:grid-cols-[1fr_auto]">
+          <div className="mt-6 mb-6 grid gap-3 sm:grid-cols-[1fr_auto]">
             <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-txt-dim)]" />
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#64748b]" />
               <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search posts..." className="inp" />
             </div>
             <select value={cat} onChange={e => setCat(e.target.value)} className="sel">
@@ -361,21 +409,21 @@ function Posts({ posts }) {
         </Rv>
 
         {list.length === 0 ? (
-          <div className="rounded-lg border border-white/[0.025] bg-[#060b16] p-10 text-center text-[var(--color-txt-dim)] text-xs">No posts published yet.</div>
+          <div className="rounded-xl border border-white/[0.03] bg-[var(--color-surface)] p-12 text-center text-[#64748b] text-xs">No posts published yet.</div>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {list.map((p, i) => (
-              <Rv key={p.id || p.title} delay={i * 0.03}>
-                <div className="card flex min-h-[260px] flex-col h-full">
-                  <div className="mb-2.5 flex flex-wrap gap-1.5">
+              <Rv key={p.id || p.title} delay={i * 0.04}>
+                <div className="card flex min-h-[280px] flex-col h-full">
+                  <div className="mb-3 flex flex-wrap gap-2">
                     <span className="badge badge-cyan">{p.category}</span>
                     {p.difficulty && <span className="badge badge-dim">{p.difficulty}</span>}
                   </div>
                   <h3 className="break-words text-sm font-bold leading-snug text-white">{p.title}</h3>
-                  <p className="mt-2 flex-1 text-xs leading-relaxed text-[var(--color-txt-dim)]">{p.excerpt}</p>
-                  <div className="mt-3 flex items-center justify-between border-t border-white/[0.025] pt-3">
-                    <span className="flex items-center gap-1 text-[10px] font-bold text-[var(--color-txt-dim)]"><Calendar className="h-3 w-3" />{String(p.created_at || p.date || "").slice(0, 10)}</span>
-                    <button onClick={() => setSel(p)} className="text-[11px] font-bold text-[var(--color-neon)] hover:text-white transition-colors">Read →</button>
+                  <p className="mt-2.5 flex-1 text-xs leading-relaxed text-[#94a3b8]">{p.excerpt}</p>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-3">
+                    <span className="flex items-center gap-1.5 text-[10px] font-bold text-[#64748b]"><Calendar className="h-3 w-3" />{String(p.created_at || p.date || "").slice(0, 10)}</span>
+                    <button onClick={() => setSel(p)} className="text-[11px] font-bold text-[var(--color-cyber)] hover:text-white transition-colors">Read →</button>
                   </div>
                 </div>
               </Rv>
@@ -399,19 +447,19 @@ function Pages({ pages }) {
         </Rv>
         {pages.length === 0 ? (
           <Rv delay={0.08}>
-            <div className="mt-6 rounded-lg border border-white/[0.025] bg-[#060b16] p-10 text-center text-[var(--color-txt-dim)] text-xs">No pages published yet.</div>
+            <div className="mt-6 rounded-xl border border-white/[0.03] bg-[var(--color-surface)] p-12 text-center text-[#64748b] text-xs">No pages published yet.</div>
           </Rv>
         ) : (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {pages.map((pg, i) => (
-              <Rv key={pg.id || pg.slug} delay={i * 0.03}>
+              <Rv key={pg.id || pg.slug} delay={i * 0.04}>
                 <div className="card h-full flex flex-col">
                   <span className="badge badge-green">/{pg.slug || slugify(pg.title)}</span>
-                  <h3 className="mt-2.5 break-words text-sm font-bold text-white">{pg.title}</h3>
-                  <p className="mt-1.5 flex-1 text-xs leading-relaxed text-[var(--color-txt-dim)]">{pg.summary}</p>
-                  <div className="mt-3 flex items-center justify-between border-t border-white/[0.025] pt-3">
-                    <span className="flex items-center gap-1 text-[10px] font-bold text-[var(--color-txt-dim)]"><Calendar className="h-3 w-3" />{String(pg.created_at || pg.date || "").slice(0, 10)}</span>
-                    <a href={`#/p/${pg.slug || slugify(pg.title)}`} className="text-[11px] font-bold text-[var(--color-neon)] hover:text-white transition-colors">Open →</a>
+                  <h3 className="mt-3 break-words text-sm font-bold text-white">{pg.title}</h3>
+                  <p className="mt-2 flex-1 text-xs leading-relaxed text-[#94a3b8]">{pg.summary}</p>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-3">
+                    <span className="flex items-center gap-1.5 text-[10px] font-bold text-[#64748b]"><Calendar className="h-3 w-3" />{String(pg.created_at || pg.date || "").slice(0, 10)}</span>
+                    <a href={`#/p/${pg.slug || slugify(pg.title)}`} className="text-[11px] font-bold text-[var(--color-cyber)] hover:text-white transition-colors">Open →</a>
                   </div>
                 </div>
               </Rv>
@@ -433,10 +481,10 @@ function PageView({ page, onBack }) {
         <div className="card">
           <span className="badge badge-green">/{page.slug}</span>
           <h1 className="mt-4 break-words text-2xl font-bold text-white sm:text-3xl">{page.title}</h1>
-          <p className="mt-2 text-xs text-[var(--color-txt-dim)]">{page.summary}</p>
-          <div className="mt-2 flex items-center gap-1 text-[10px] font-bold text-[var(--color-txt-dim)]"><Calendar className="h-3 w-3" />{String(page.created_at || page.date || "").slice(0, 10)}</div>
-          <div className="mt-5 border-t border-white/[0.025] pt-5">
-            <p className="whitespace-pre-wrap break-words text-xs leading-relaxed text-[var(--color-txt-dim)]">{page.body}</p>
+          <p className="mt-2 text-xs text-[#64748b]">{page.summary}</p>
+          <div className="mt-2 flex items-center gap-1.5 text-[10px] font-bold text-[#64748b]"><Calendar className="h-3 w-3" />{String(page.created_at || page.date || "").slice(0, 10)}</div>
+          <div className="mt-5 border-t border-white/[0.03] pt-5">
+            <p className="whitespace-pre-wrap break-words text-xs leading-relaxed text-[#94a3b8]">{page.body}</p>
           </div>
         </div>
       </div>
@@ -457,7 +505,7 @@ function Disclosure({ c }) {
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-4xl max-w-3xl">Public-safe disclosure portfolio.</h2>
         </Rv>
         <Rv delay={0.08}>
-          <div className="mt-6 overflow-hidden rounded-lg border border-white/[0.025] bg-[#060b16]">
+          <div className="mt-6 overflow-hidden rounded-xl border border-white/[0.03] bg-[var(--color-surface)]">
             <div className="overflow-x-auto">
               <table className="tbl">
                 <thead>
@@ -467,10 +515,10 @@ function Disclosure({ c }) {
                   {c.disclosures.map((d, i) => (
                     <tr key={`${d.organization}-${i}`}>
                       <td className="font-bold text-white whitespace-nowrap">{d.organization}</td>
-                      <td className="text-[var(--color-txt-dim)] whitespace-nowrap">{d.type}</td>
+                      <td className="text-[#94a3b8] whitespace-nowrap">{d.type}</td>
                       <td><span className={`badge badge-${sv(d.status)}`}>{d.status}</span></td>
                       <td><span className={`badge badge-${rv(d.severity)}`}>{d.severity}</span></td>
-                      <td className="text-xs text-[var(--color-txt-dim)] min-w-[160px]">{d.disclosure}</td>
+                      <td className="text-xs text-[#94a3b8] min-w-[160px]">{d.disclosure}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -494,15 +542,15 @@ function Contact({ c }) {
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-4xl max-w-4xl">Open to ethical security research, internships and junior AppSec/Pentest roles.</h2>
         </Rv>
         <Rv delay={0.08}>
-          <div className="mt-6 card grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="mt-6 card grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <h3 className="text-base font-bold text-white">Let's connect.</h3>
-              <p className="mt-1.5 max-w-lg text-xs text-[var(--color-txt-dim)]">For responsible disclosure, collaboration or professional opportunities.</p>
+              <p className="mt-2 max-w-lg text-xs text-[#94a3b8]">For responsible disclosure, collaboration or professional opportunities.</p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {p.email && <a href={`mailto:${encodeURIComponent(p.email)}`} className="btn btn-fill text-[11px]"><Mail className="h-3 w-3" />Email</a>}
-              {p.linkedin && <a href={p.linkedin} target="_blank" rel="noreferrer" className="btn btn-line text-[11px]"><ExternalLink className="h-3 w-3" />LinkedIn</a>}
-              {p.github && <a href={p.github} target="_blank" rel="noreferrer" className="btn btn-line text-[11px]"><ExternalLink className="h-3 w-3" />GitHub</a>}
+            <div className="flex flex-wrap gap-3">
+              {p.email && <a href={`mailto:${encodeURIComponent(p.email)}`} className="btn btn-fill text-[11px]"><Mail className="h-3.5 w-3.5" />Email</a>}
+              {p.linkedin && <a href={p.linkedin} target="_blank" rel="noreferrer" className="btn btn-line text-[11px]"><ExternalLink className="h-3.5 w-3.5" />LinkedIn</a>}
+              {p.github && <a href={p.github} target="_blank" rel="noreferrer" className="btn btn-line text-[11px]"><ExternalLink className="h-3.5 w-3.5" />GitHub</a>}
             </div>
           </div>
         </Rv>
@@ -522,21 +570,21 @@ function Modal({ item, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/90 p-4 backdrop-blur-sm" onClick={e => { if (e.target === e.currentTarget) onClose(); }} role="dialog" aria-modal="true">
-      <div className="relative my-8 w-full max-w-2xl rounded-lg border border-white/[0.04] bg-[#080e1c] p-5 sm:p-7">
-        <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="relative my-8 w-full max-w-2xl rounded-xl border border-white/[0.05] bg-[var(--color-bg-card)] p-6 sm:p-8">
+        <div className="mb-5 flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="mb-2 flex flex-wrap gap-1.5">
+            <div className="mb-3 flex flex-wrap gap-2">
               <span className="badge badge-cyan">{item.category || "Article"}</span>
               {item.difficulty && <span className="badge badge-dim">{item.difficulty}</span>}
             </div>
             <h3 className="break-words text-lg font-bold text-white">{item.title}</h3>
-            <div className="mt-1 text-[10px] font-bold text-[var(--color-txt-dim)]">{String(item.created_at || item.date || "").slice(0, 10)}</div>
+            <div className="mt-1.5 text-[10px] font-bold text-[#64748b]">{String(item.created_at || item.date || "").slice(0, 10)}</div>
           </div>
-          <button onClick={onClose} className="shrink-0 grid h-7 w-7 place-items-center rounded border border-white/[0.06] text-[var(--color-txt-dim)] hover:text-white hover:border-white/10 transition-colors" aria-label="Close">
-            <X className="h-3.5 w-3.5" />
+          <button onClick={onClose} className="shrink-0 grid h-8 w-8 place-items-center rounded-lg border border-white/[0.06] text-[#64748b] hover:text-white hover:border-white/10 transition-colors" aria-label="Close">
+            <X className="h-4 w-4" />
           </button>
         </div>
-        <p className="whitespace-pre-wrap break-words text-xs leading-relaxed text-[var(--color-txt-dim)]">{item.body}</p>
+        <p className="whitespace-pre-wrap break-words text-xs leading-relaxed text-[#94a3b8]">{item.body}</p>
       </div>
     </div>
   );
@@ -547,11 +595,11 @@ function Footer({ c }) {
   return (
     <footer>
       <div className="foot-line" />
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-7 text-[11px] text-[var(--color-txt-dim)] sm:px-8 md:flex-row md:items-center md:justify-between">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-[11px] text-[#64748b] sm:px-8 md:flex-row md:items-center md:justify-between">
         <div>© {new Date().getFullYear()} {c.profile.name}</div>
-        <div className="flex gap-1.5">
-          <span className="rounded border border-white/[0.03] px-2 py-0.5">No sensitive details</span>
-          <span className="rounded border border-white/[0.03] px-2 py-0.5">Responsible disclosure</span>
+        <div className="flex gap-2">
+          <span className="rounded-lg border border-white/[0.04] px-2.5 py-1">No sensitive details</span>
+          <span className="rounded-lg border border-white/[0.04] px-2.5 py-1">Responsible disclosure</span>
         </div>
       </div>
     </footer>
@@ -597,16 +645,22 @@ export default function App() {
 
   if (slug && page) {
     return (
-      <div className="min-h-screen bg-[#030712] text-[var(--color-txt)]">
-        <div className="bg-dots" />
+      <div className="min-h-screen bg-[var(--color-bg)] text-[#e2e8f0]">
+        <MatrixRain />
+        <HexParticles />
+        <div className="scanline-overlay" />
+        <div className="corner-dot tl" /><div className="corner-dot tr" /><div className="corner-dot bl" /><div className="corner-dot br" />
         <div className="relative z-10"><PageView page={page} onBack={() => { window.location.hash = "home"; }} /></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#030712] text-[var(--color-txt)]">
-      <div className="bg-dots" />
+    <div className="min-h-screen bg-[var(--color-bg)] text-[#e2e8f0]">
+      <MatrixRain />
+      <HexParticles />
+      <div className="scanline-overlay" />
+      <div className="corner-dot tl" /><div className="corner-dot tr" /><div className="corner-dot bl" /><div className="corner-dot br" />
       <div className="relative z-10">
         <Nav active={active} />
         <main>
