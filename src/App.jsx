@@ -5,7 +5,6 @@ import {
   Bug,
   Lock,
   Globe,
-  BookOpen,
   Mail,
   ExternalLink,
   Search,
