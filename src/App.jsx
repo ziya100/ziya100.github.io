@@ -116,14 +116,23 @@ function MatrixRain() {
 
 /* ═══════════ HEX PARTICLES ═══════════ */
 function HexParticles() {
-  const particles = useMemo(() =>
-    Array.from({ length: 15 }, (_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 8}s`,
-      duration: `${6 + Math.random() * 6}s`,
-      size: `${4 + Math.random() * 4}px`,
-    })), []);
+  const particles = [
+    { id: 0, left: "5%", delay: "0s", duration: "8s", size: "5px" },
+    { id: 1, left: "12%", delay: "1.2s", duration: "10s", size: "6px" },
+    { id: 2, left: "22%", delay: "2.5s", duration: "7s", size: "4px" },
+    { id: 3, left: "30%", delay: "0.8s", duration: "11s", size: "7px" },
+    { id: 4, left: "38%", delay: "3.1s", duration: "9s", size: "5px" },
+    { id: 5, left: "48%", delay: "1.8s", duration: "8s", size: "6px" },
+    { id: 6, left: "55%", delay: "4.2s", duration: "12s", size: "4px" },
+    { id: 7, left: "63%", delay: "0.5s", duration: "7s", size: "8px" },
+    { id: 8, left: "72%", delay: "2.9s", duration: "10s", size: "5px" },
+    { id: 9, left: "78%", delay: "1.5s", duration: "9s", size: "6px" },
+    { id: 10, left: "85%", delay: "3.8s", duration: "8s", size: "4px" },
+    { id: 11, left: "90%", delay: "0.3s", duration: "11s", size: "7px" },
+    { id: 12, left: "95%", delay: "2.1s", duration: "7s", size: "5px" },
+    { id: 13, left: "18%", delay: "4.5s", duration: "10s", size: "6px" },
+    { id: 14, left: "68%", delay: "3.3s", duration: "9s", size: "5px" },
+  ];
   return (
     <div className="fixed inset-0 z-[1] pointer-events-none">
       {particles.map(p => (
