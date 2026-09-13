@@ -7,10 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
 
 # Editor directories and files
 .vscode/*
@@ -22,4 +35,30 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-dist/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Debug files
+*.tgz
+*.debug
+
+# Optional npm dependencies
+package-lock.json
+
+# Admin panel / private files (DO NOT COMMIT)
+admin/
+admin-panel/
+private/
+*.secret
+*.key
+*.pem
