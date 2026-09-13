@@ -76,74 +76,6 @@ async function api(path) {
   return r.json();
 }
 
-/* ═══════════ MATRIX RAIN ═══════════ */
-function MatrixRain() {
-  const canvasRef = useRef(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let w, h, cols, drops;
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`アイウエオカキクケコサシスセソタチツテトナニヌネノ";
-    const fontSize = 14;
-
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      cols = Math.floor(w / fontSize);
-      drops = Array(cols).fill(1);
-    }
-    resize();
-    window.addEventListener("resize", resize);
-
-    function draw() {
-      ctx.fillStyle = "rgba(10, 10, 15, 0.05)";
-      ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = "#00f0ff";
-      ctx.font = `${fontSize}px monospace`;
-      for (let i = 0; i < cols; i++) {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > h && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
-    }
-    const interval = setInterval(draw, 50);
-    return () => { clearInterval(interval); window.removeEventListener("resize", resize); };
-  }, []);
-  return <canvas ref={canvasRef} id="matrix-canvas" />;
-}
-
-/* ═══════════ HEX PARTICLES ═══════════ */
-function HexParticles() {
-  const particles = [
-    { id: 0, left: "5%", delay: "0s", duration: "8s", size: "5px" },
-    { id: 1, left: "12%", delay: "1.2s", duration: "10s", size: "6px" },
-    { id: 2, left: "22%", delay: "2.5s", duration: "7s", size: "4px" },
-    { id: 3, left: "30%", delay: "0.8s", duration: "11s", size: "7px" },
-    { id: 4, left: "38%", delay: "3.1s", duration: "9s", size: "5px" },
-    { id: 5, left: "48%", delay: "1.8s", duration: "8s", size: "6px" },
-    { id: 6, left: "55%", delay: "4.2s", duration: "12s", size: "4px" },
-    { id: 7, left: "63%", delay: "0.5s", duration: "7s", size: "8px" },
-    { id: 8, left: "72%", delay: "2.9s", duration: "10s", size: "5px" },
-    { id: 9, left: "78%", delay: "1.5s", duration: "9s", size: "6px" },
-    { id: 10, left: "85%", delay: "3.8s", duration: "8s", size: "4px" },
-    { id: 11, left: "90%", delay: "0.3s", duration: "11s", size: "7px" },
-    { id: 12, left: "95%", delay: "2.1s", duration: "7s", size: "5px" },
-    { id: 13, left: "18%", delay: "4.5s", duration: "10s", size: "6px" },
-    { id: 14, left: "68%", delay: "3.3s", duration: "9s", size: "5px" },
-  ];
-  return (
-    <div className="fixed inset-0 z-[1] pointer-events-none">
-      {particles.map(p => (
-        <div key={p.id} className="hex-particle" style={{
-          left: p.left, animationDelay: p.delay, animationDuration: p.duration, width: p.size, height: p.size,
-        }} />
-      ))}
-    </div>
-  );
-}
-
 /* ═══════════ REVEAL ═══════════ */
 function useRv() {
   const ref = useRef(null);
@@ -178,7 +110,7 @@ function Nav({ active }) {
     <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/[0.04]" : "bg-transparent")}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#home" className="flex items-center gap-3 group">
-          <div className="h-10 w-10 grid place-items-center rounded-lg border border-[var(--color-cyber)]/20 bg-[var(--color-bg-card)] group-hover:border-[var(--color-cyber)]/40 group-hover:shadow-[0_0_15px_rgba(0,240,255,0.15)] transition-all">
+          <div className="h-10 w-10 grid place-items-center rounded-lg border border-white/[0.06] bg-[var(--color-bg-card)] group-hover:border-[var(--color-cyber)]/20 transition-all">
             <Shield className="h-5 w-5 text-[var(--color-cyber)]" />
           </div>
           <div>
@@ -192,11 +124,11 @@ function Nav({ active }) {
         </nav>
 
         <div className="hidden lg:flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-1.5">
-          <span className="w-2 h-2 rounded-full bg-[var(--color-neon)] shadow-[0_0_8px_var(--color-neon)]" />
+          <span className="w-2 h-2 rounded-full bg-[var(--color-neon)]" />
           <span className="text-[9px] font-bold tracking-wider uppercase text-[#64748b]">Available</span>
         </div>
 
-        <button className="lg:hidden grid h-10 w-10 place-items-center rounded-lg border border-white/[0.06] text-white hover:border-[var(--color-cyber)]/20 transition-colors" onClick={() => setOpen(v => !v)} aria-label="Menu">
+        <button className="lg:hidden grid h-10 w-10 place-items-center rounded-lg border border-white/[0.06] text-white hover:border-white/10 transition-colors" onClick={() => setOpen(v => !v)} aria-label="Menu">
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
@@ -233,8 +165,7 @@ function Hero({ c }) {
         <div>
           <Rv>
             <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              <span className="glitch" data-text={p.firstName}>{p.firstName}</span>{" "}
-              <span className="text-[var(--color-cyber)] glitch" data-text={p.lastName}>{p.lastName}</span>
+              {p.firstName} <span className="text-[var(--color-cyber)]">{p.lastName}</span>
               <span className="block mt-3 text-base font-medium text-[#64748b] sm:text-lg">{p.title}</span>
             </h1>
           </Rv>
@@ -299,7 +230,7 @@ function Hero({ c }) {
               </div>
               <div className="flex items-center gap-2 text-[var(--color-cyber)] text-xs pt-1">
                 <span>$</span>
-                <span className="w-2 h-4 bg-[var(--color-cyber)] animate-pulse shadow-[0_0_8px_var(--color-cyber)]" />
+                <span className="w-2 h-4 bg-[var(--color-cyber)] animate-pulse" />
               </div>
             </div>
           </div>
@@ -328,9 +259,7 @@ function About() {
           {items.map((c, i) => (
             <Rv key={c.title} delay={i * 0.08}>
               <div className="card h-full">
-                <div className="h-10 w-10 grid place-items-center rounded-lg border border-[var(--color-cyber)]/10 bg-[var(--color-cyber)]/5">
-                  <c.icon className="h-5 w-5 text-[var(--color-cyber)]" />
-                </div>
+                <c.icon className="h-5 w-5 text-[var(--color-cyber)]" />
                 <h3 className="mt-4 text-sm font-bold text-white">{c.title}</h3>
                 <p className="mt-2 text-xs leading-relaxed text-[#94a3b8]">{c.desc}</p>
                 <div className="bar mt-4"><div className="bar-fill" style={{ width: `${75 + i * 8}%` }} /></div>
@@ -655,10 +584,6 @@ export default function App() {
   if (slug && page) {
     return (
       <div className="min-h-screen bg-[var(--color-bg)] text-[#e2e8f0]">
-        <MatrixRain />
-        <HexParticles />
-        <div className="scanline-overlay" />
-        <div className="corner-dot tl" /><div className="corner-dot tr" /><div className="corner-dot bl" /><div className="corner-dot br" />
         <div className="relative z-10"><PageView page={page} onBack={() => { window.location.hash = "home"; }} /></div>
       </div>
     );
@@ -666,23 +591,17 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[#e2e8f0]">
-      <MatrixRain />
-      <HexParticles />
-      <div className="scanline-overlay" />
-      <div className="corner-dot tl" /><div className="corner-dot tr" /><div className="corner-dot bl" /><div className="corner-dot br" />
-      <div className="relative z-10">
-        <Nav active={active} />
-        <main>
-          <Hero c={content} />
-          <About />
-          <Achievements c={content} />
-          <Posts posts={posts} />
-          <Pages pages={pages} />
-          <Disclosure c={content} />
-          <Contact c={content} />
-        </main>
-        <Footer c={content} />
-      </div>
+      <Nav active={active} />
+      <main>
+        <Hero c={content} />
+        <About />
+        <Achievements c={content} />
+        <Posts posts={posts} />
+        <Pages pages={pages} />
+        <Disclosure c={content} />
+        <Contact c={content} />
+      </main>
+      <Footer c={content} />
     </div>
   );
 }
