@@ -88,9 +88,9 @@ function MatrixRain() {
     resize();
     window.addEventListener("resize", resize);
     function draw() {
-      ctx.fillStyle = "rgba(12, 14, 20, 0.06)";
+      ctx.fillStyle = "rgba(11, 14, 24, 0.06)";
       ctx.fillRect(0, 0, w, h);
-      ctx.fillStyle = "#00f0ff";
+      ctx.fillStyle = "#00d4ff";
       ctx.font = `${fontSize}px monospace`;
       for (let i = 0; i < cols; i++) {
         const ch = chars[Math.floor(Math.random() * chars.length)];
@@ -162,7 +162,7 @@ function Nav({ active }) {
     return () => window.removeEventListener("scroll", fn);
   }, []);
   return (
-    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-[#0c0e14]/80 backdrop-blur-xl border-b border-white/[0.04]" : "bg-transparent")}>
+    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-[#0b0e18]/80 backdrop-blur-xl border-b border-white/[0.04]" : "bg-transparent")}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#home" className="flex items-center gap-3 group">
           <div className="h-10 w-10 grid place-items-center rounded-lg border border-white/[0.06] bg-[var(--color-bg-card)] group-hover:border-[var(--color-cyber)]/20 transition-all">
@@ -185,7 +185,7 @@ function Nav({ active }) {
         </button>
       </div>
       {open && (
-        <div className="lg:hidden border-t border-white/[0.04] bg-[#0c0e14]/95 backdrop-blur-xl px-5 py-4">
+        <div className="lg:hidden border-t border-white/[0.04] bg-[#0b0e18]/95 backdrop-blur-xl px-5 py-4">
           <div className="grid gap-1">
             {NAV.map(n => {
               const Ic = n.icon;
