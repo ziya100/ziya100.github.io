@@ -13,7 +13,6 @@ const FALLBACK = {
     lastName: "Abdullayev",
     name: "Ziya Abdullayev",
     title: "Cyber Security Researcher",
-    headline: "Web Application Security, Bug Bounty & Responsible Disclosure",
     summary: "Identifying and responsibly disclosing security vulnerabilities across web applications and APIs. Specializing in access control, authentication flaws, API logic weaknesses and penetration testing with clear, actionable reporting.",
     email: "ziya.abdullayev.40@gmail.com",
     linkedin: "https://www.linkedin.com/in/ziya-abdullayev-cyber/",
@@ -35,11 +34,6 @@ const FALLBACK = {
     { organization: "Polestar", type: "VDP", status: "Confirmed", severity: "Critical", disclosure: "Technical details are not publicly disclosed. Public mention is limited to non-technical responsible disclosure context." },
     { organization: "University of Texas", type: "Responsible Disclosure", status: "Published", severity: "Information Disclosure", disclosure: "Hall of Fame recognition for valid responsible disclosure reports." },
     { organization: "European Commission", type: "VDP / CVD", status: "Fixed", severity: "Not Public", disclosure: "Issue fixed through the official disclosure process." },
-  ],
-  learning: [
-    { topic: "NoSQL Injection", note: "Studied MongoDB-style boolean conditions, operator injection and backend query logic manipulation in lab environments.", date: "2026-05-08" },
-    { topic: "XXE", note: "Learned how unsafe XML parsing and external entities can lead to file disclosure, SSRF-style requests or denial of service.", date: "2026-05-06" },
-    { topic: "Active Directory Enumeration", note: "Practiced Linux-based credentialed enumeration with SMB, LDAP, BloodHound.py, NetExec, Impacket and rpcclient.", date: "2026-05-05" },
   ],
 };
 
@@ -66,7 +60,6 @@ function merge(c) {
     stats: Array.isArray(x.stats) && x.stats.length ? x.stats : FALLBACK.stats,
     achievements: Array.isArray(x.achievements) && x.achievements.length ? x.achievements : FALLBACK.achievements,
     disclosures: Array.isArray(x.disclosures) && x.disclosures.length ? x.disclosures : FALLBACK.disclosures,
-    learning: Array.isArray(x.learning) && x.learning.length ? x.learning : FALLBACK.learning,
   };
 }
 
@@ -74,6 +67,70 @@ async function api(path) {
   const r = await fetch(`${API_BASE_URL}${path}`);
   if (!r.ok) throw new Error();
   return r.json();
+}
+
+/* ═══════════ MATRIX ═══════════ */
+function MatrixRain() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let w, h, cols, drops;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?/~`";
+    const fontSize = 14;
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      cols = Math.floor(w / fontSize);
+      drops = Array(cols).fill(1);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    function draw() {
+      ctx.fillStyle = "rgba(12, 14, 20, 0.06)";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#00f0ff";
+      ctx.font = `${fontSize}px monospace`;
+      for (let i = 0; i < cols; i++) {
+        const ch = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > h && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    const iv = setInterval(draw, 50);
+    return () => { clearInterval(iv); window.removeEventListener("resize", resize); };
+  }, []);
+  return <canvas ref={ref} id="matrix-canvas" />;
+}
+
+/* ═══════════ HEX ═══════════ */
+function HexParticles() {
+  const data = [
+    { id: 0, left: "5%", delay: "0s", dur: "8s", size: "5px" },
+    { id: 1, left: "12%", delay: "1.2s", dur: "10s", size: "6px" },
+    { id: 2, left: "22%", delay: "2.5s", dur: "7s", size: "4px" },
+    { id: 3, left: "30%", delay: "0.8s", dur: "11s", size: "7px" },
+    { id: 4, left: "38%", delay: "3.1s", dur: "9s", size: "5px" },
+    { id: 5, left: "48%", delay: "1.8s", dur: "8s", size: "6px" },
+    { id: 6, left: "55%", delay: "4.2s", dur: "12s", size: "4px" },
+    { id: 7, left: "63%", delay: "0.5s", dur: "7s", size: "8px" },
+    { id: 8, left: "72%", delay: "2.9s", dur: "10s", size: "5px" },
+    { id: 9, left: "78%", delay: "1.5s", dur: "9s", size: "6px" },
+    { id: 10, left: "85%", delay: "3.8s", dur: "8s", size: "4px" },
+    { id: 11, left: "90%", delay: "0.3s", dur: "11s", size: "7px" },
+    { id: 12, left: "95%", delay: "2.1s", dur: "7s", size: "5px" },
+    { id: 13, left: "18%", delay: "4.5s", dur: "10s", size: "6px" },
+    { id: 14, left: "68%", delay: "3.3s", dur: "9s", size: "5px" },
+  ];
+  return (
+    <div className="fixed inset-0 z-[1] pointer-events-none">
+      {data.map(p => (
+        <div key={p.id} className="hex-particle" style={{ left: p.left, animationDelay: p.delay, animationDuration: p.dur, width: p.size, height: p.size }} />
+      ))}
+    </div>
+  );
 }
 
 /* ═══════════ REVEAL ═══════════ */
@@ -95,46 +152,40 @@ function Rv({ children, className = "", delay = 0 }) {
   return <div ref={ref} className={cn("rv", v && "vis", className)} style={{ transitionDelay: `${delay}s` }}>{children}</div>;
 }
 
-/* ═══════════ NAVBAR ═══════════ */
+/* ═══════════ NAV ═══════════ */
 function Nav({ active }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
-
   return (
-    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/[0.04]" : "bg-transparent")}>
+    <header className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-[#0c0e14]/80 backdrop-blur-xl border-b border-white/[0.04]" : "bg-transparent")}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#home" className="flex items-center gap-3 group">
           <div className="h-10 w-10 grid place-items-center rounded-lg border border-white/[0.06] bg-[var(--color-bg-card)] group-hover:border-[var(--color-cyber)]/20 transition-all">
             <Shield className="h-5 w-5 text-[var(--color-cyber)]" />
           </div>
           <div>
-            <div className="text-sm font-bold tracking-[0.25em] text-white uppercase">ZiyaSec<span className="text-[var(--color-cyber)]">.</span></div>
+            <div className="text-sm font-bold tracking-[0.25em] text-white uppercase">ZiyaSec</div>
             <div className="text-[9px] font-semibold tracking-[0.15em] uppercase text-[#64748b]">Security Research</div>
           </div>
         </a>
-
         <nav className="hidden items-center gap-0.5 lg:flex">
           {NAV.map(n => <a key={n.id} href={`#${n.id}`} className={cn("nav-link", active === n.id && "active")}>{n.label}</a>)}
         </nav>
-
         <div className="hidden lg:flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-1.5">
           <span className="w-2 h-2 rounded-full bg-[var(--color-neon)]" />
           <span className="text-[9px] font-bold tracking-wider uppercase text-[#64748b]">Available</span>
         </div>
-
         <button className="lg:hidden grid h-10 w-10 place-items-center rounded-lg border border-white/[0.06] text-white hover:border-white/10 transition-colors" onClick={() => setOpen(v => !v)} aria-label="Menu">
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
-
       {open && (
-        <div className="lg:hidden border-t border-white/[0.04] bg-[#0a0a0f]/95 backdrop-blur-xl px-5 py-4">
+        <div className="lg:hidden border-t border-white/[0.04] bg-[#0c0e14]/95 backdrop-blur-xl px-5 py-4">
           <div className="grid gap-1">
             {NAV.map(n => {
               const Ic = n.icon;
@@ -152,13 +203,11 @@ function Hero({ c }) {
   const p = c.profile;
   const [t, setT] = useState("");
   const full = "$ whoami";
-
   useEffect(() => {
     let i = 0;
     const tm = setInterval(() => { if (i <= full.length) { setT(full.slice(0, i)); i++; } else clearInterval(tm); }, 100);
     return () => clearInterval(tm);
   }, []);
-
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 pb-16">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
@@ -190,7 +239,6 @@ function Hero({ c }) {
             </div>
           </Rv>
         </div>
-
         <Rv delay={0.15}>
           <div className="card p-0 overflow-hidden">
             <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/[0.04]">
@@ -247,7 +295,6 @@ function About() {
     { icon: Bug, title: "Web & API Security", desc: "Focus areas include access control, authentication, IDOR, JWT, SSRF, API logic flaws, file upload risks and information disclosure." },
     { icon: FileText, title: "Report Quality", desc: "Strong reports explain impact, reproduction, business risk, screenshots, proof and practical remediation recommendations." },
   ];
-
   return (
     <section id="about" className="py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 lg:px-8">
@@ -274,14 +321,7 @@ function About() {
 
 /* ═══════════ ACHIEVEMENTS ═══════════ */
 function Achievements({ c }) {
-  const tv = (t) => {
-    const l = t.toLowerCase();
-    if (l.includes("critical")) return "red";
-    if (l.includes("fixed")) return "green";
-    if (l.includes("hall")) return "yellow";
-    return "cyan";
-  };
-
+  const tv = (t) => { const l = t.toLowerCase(); if (l.includes("critical")) return "red"; if (l.includes("fixed")) return "green"; if (l.includes("hall")) return "yellow"; return "cyan"; };
   return (
     <section id="achievements" className="py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 lg:px-8">
@@ -320,13 +360,11 @@ function Posts({ posts }) {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
   const [sel, setSel] = useState(null);
-
   const cats = useMemo(() => ["All", ...Array.from(new Set(posts.map(p => p.category).filter(Boolean)))], [posts]);
   const list = posts.filter(p => {
     const b = [p.title, p.category, p.excerpt, p.body].join(" ").toLowerCase();
     return b.includes(q.toLowerCase()) && (cat === "All" || p.category === cat);
   });
-
   return (
     <section id="posts" className="py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 lg:px-8">
@@ -345,7 +383,6 @@ function Posts({ posts }) {
             </select>
           </div>
         </Rv>
-
         {list.length === 0 ? (
           <div className="rounded-xl border border-white/[0.03] bg-[var(--color-surface)] p-12 text-center text-[#64748b] text-xs">No posts published yet.</div>
         ) : (
@@ -434,7 +471,6 @@ function PageView({ page, onBack }) {
 function Disclosure({ c }) {
   const sv = s => { const l = s.toLowerCase(); return (l.includes("fixed") || l.includes("published")) ? "green" : "cyan"; };
   const rv = s => { const l = s.toLowerCase(); if (l.includes("critical")) return "red"; if (l.includes("information")) return "yellow"; return "dim"; };
-
   return (
     <section id="disclosure" className="py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 lg:px-8">
@@ -505,7 +541,6 @@ function Modal({ item, onClose }) {
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", fn); document.body.style.overflow = ""; };
   }, [onClose]);
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/90 p-4 backdrop-blur-sm" onClick={e => { if (e.target === e.currentTarget) onClose(); }} role="dialog" aria-modal="true">
       <div className="relative my-8 w-full max-w-2xl rounded-xl border border-white/[0.05] bg-[var(--color-bg-card)] p-6 sm:p-8">
@@ -584,6 +619,9 @@ export default function App() {
   if (slug && page) {
     return (
       <div className="min-h-screen bg-[var(--color-bg)] text-[#e2e8f0]">
+        <MatrixRain /><HexParticles />
+        <div className="scanline-overlay" />
+        <div className="corner-dot tl" /><div className="corner-dot tr" /><div className="corner-dot bl" /><div className="corner-dot br" />
         <div className="relative z-10"><PageView page={page} onBack={() => { window.location.hash = "home"; }} /></div>
       </div>
     );
@@ -591,17 +629,22 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] text-[#e2e8f0]">
-      <Nav active={active} />
-      <main>
-        <Hero c={content} />
-        <About />
-        <Achievements c={content} />
-        <Posts posts={posts} />
-        <Pages pages={pages} />
-        <Disclosure c={content} />
-        <Contact c={content} />
-      </main>
-      <Footer c={content} />
+      <MatrixRain /><HexParticles />
+      <div className="scanline-overlay" />
+      <div className="corner-dot tl" /><div className="corner-dot tr" /><div className="corner-dot bl" /><div className="corner-dot br" />
+      <div className="relative z-10">
+        <Nav active={active} />
+        <main>
+          <Hero c={content} />
+          <About />
+          <Achievements c={content} />
+          <Posts posts={posts} />
+          <Pages pages={pages} />
+          <Disclosure c={content} />
+          <Contact c={content} />
+        </main>
+        <Footer c={content} />
+      </div>
     </div>
   );
 }
