@@ -262,20 +262,31 @@ function MatrixRain() {
 /* ═══════════════════════════════════════════════════════════
    FLOATING HEX PARTICLES
    ═══════════════════════════════════════════════════════════ */
+const HEX_CHARS = ["0x", ">>", "::", "//", "&&", "||", "##", "$$", "@@", "01", "10", "FF", "A0", "B1", "C2", "D3", "E4", "5F"];
+
+function seededRandom(seed) {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function createParticles() {
+  const rng = seededRandom(42);
+  return Array.from({ length: HEX_CHARS.length }, (_, i) => ({
+    id: i,
+    char: HEX_CHARS[i],
+    left: `${rng() * 100}%`,
+    delay: `${rng() * 20}s`,
+    duration: `${15 + rng() * 25}s`,
+    size: `${8 + rng() * 6}px`,
+    opacity: 0.15 + rng() * 0.25,
+  }));
+}
+
 function HexParticles() {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 18 }, (_, i) => ({
-        id: i,
-        char: ["0x", ">>", "::", "//", "&&", "||", "##", "$$", "@@", "01", "10", "FF", "A0", "B1", "C2", "D3", "E4", "5F"][i],
-        left: `${Math.random() * 100}%`,
-        delay: `${Math.random() * 20}s`,
-        duration: `${15 + Math.random() * 25}s`,
-        size: `${8 + Math.random() * 6}px`,
-        opacity: 0.15 + Math.random() * 0.25,
-      })),
-    []
-  );
+  const [particles] = useState(createParticles);
 
   return (
     <>
